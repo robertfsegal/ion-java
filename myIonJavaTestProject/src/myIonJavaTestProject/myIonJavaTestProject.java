@@ -1,6 +1,8 @@
 package myIonJavaTestProject;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
+
 import software.amazon.ion.IonReader;
 import software.amazon.ion.IonSystem;
 import software.amazon.ion.IonWriter;
@@ -18,6 +20,15 @@ public class myIonJavaTestProject {
 		try {
 			// downconvertToJson();
 			prettyPrint();
+			
+			FileOutputStream outFileStream = new FileOutputStream("myTestIonFile.ion");
+			
+			IonWriter iw = SYSTEM.newTextWriter(outFileStream);
+			
+			iw.writeValues(SYSTEM.newReader(textIon));
+			
+			iw.flush();
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -28,8 +39,7 @@ public class myIonJavaTestProject {
 		IonReader reader = SYSTEM.newReader(textIon);
 		writer.writeValues(reader);
 
-		IonWriter iw = SYSTEM.newBinaryWriter(null, null);
-
+	
 	}
 
 	static void prettyPrint() throws IOException {
