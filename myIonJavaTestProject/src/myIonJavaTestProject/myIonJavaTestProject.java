@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import software.amazon.ion.IonReader;
 import software.amazon.ion.IonSystem;
+import software.amazon.ion.IonType;
 import software.amazon.ion.IonWriter;
 import software.amazon.ion.system.*;
 
@@ -22,13 +23,17 @@ public class myIonJavaTestProject {
 			prettyPrint();
 			
 			FileOutputStream outFileStream = new FileOutputStream("myTestIonFile.ion");
+		//	 ByteArrayOutputStream out = new ByteArrayOutputStream();
 			
-			IonWriter iw = SYSTEM.newTextWriter(outFileStream);
+			//IonWriter iw = SYSTEM.newTextWriter(outFileStream);
+			IonWriter iw = SYSTEM.newBinaryWriter(outFileStream);
 			
-			iw.writeValues(SYSTEM.newReader(textIon));
+			iw.stepIn(IonType.STRUCT);  // step into a struct
+			iw.setFieldName("hello");   // set the field name for the next value to be written
+			iw.writeString("world");    // write the next value
+			iw.stepOut();   
+			iw.close();
 			
-			iw.flush();
-
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -38,8 +43,6 @@ public class myIonJavaTestProject {
 	static void rewrite(String text, IonWriter writer) throws IOException {
 		IonReader reader = SYSTEM.newReader(textIon);
 		writer.writeValues(reader);
-
-	
 	}
 
 	static void prettyPrint() throws IOException {
